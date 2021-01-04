@@ -18,13 +18,13 @@ const ModalContent: React.FC<ModalContentProps> = ({ logOut, closeModal }) => {
           flexDirection: 'column'
         }}
       >
-        <S.StrongTitle>Tem certeza que deseja sair?</S.StrongTitle>
+        <S.StrongTitle>Are you sure you want to exit?</S.StrongTitle>
         <S.FlexRow>
           <S.ButtonModal onPress={() => logOut()}>
-            <S.Title>Sim</S.Title>
+            <S.Title>Yes</S.Title>
           </S.ButtonModal>
           <S.ButtonModal onPress={() => closeModal()}>
-            <S.Title>Não</S.Title>
+            <S.Title>No</S.Title>
           </S.ButtonModal>
         </S.FlexRow>
       </S.Container>
