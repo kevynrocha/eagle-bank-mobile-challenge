@@ -1,3 +1,4 @@
+import { showMessage } from 'react-native-flash-message';
 import api from './api';
 
 interface LoginResponse {
@@ -6,16 +7,36 @@ interface LoginResponse {
 
 interface LoginProps {
   token: string;
+  navigation: {
+    navigate: (_route: string) => void;
+  };
 }
 
 export const getUsers = async ({
-  token
-}: LoginProps): Promise<LoginResponse> => {
-  const { data } = await api.get('users', {
-    headers: {
-      Authorization: `Bearer ${token} `
-    }
-  });
+  token,
+  navigation
+}: LoginProps): Promise<LoginResponse | undefined> => {
+  try {
+    const response = await api.get('users', {
+      headers: {
+        Authorization: `Bearer ${token} `
+      }
+    });
 
-  return data;
+    if (response.status >= 400) {
+      showMessage({
+        message: response.data.message,
+        type: 'danger'
+      });
+      navigation.navigate('Login');
+    }
+
+    return response.data;
+  } catch (e) {
+    showMessage({
+      message: e.message,
+      type: 'danger'
+    });
+    navigation.navigate('Login');
+  }
 };
