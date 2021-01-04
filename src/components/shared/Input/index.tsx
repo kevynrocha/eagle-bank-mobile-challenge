@@ -23,7 +23,12 @@ const Input: React.FC<InputProps> = ({ name, ...rest }) => {
     registerField({
       name: fieldName,
       ref: inputRef.current,
-      path: 'value'
+      path: 'value',
+      clearValue(ref) {
+        const currentRef = ref;
+        currentRef.value = '';
+        currentRef.clear();
+      }
     });
   }, [fieldName, registerField]);
 
