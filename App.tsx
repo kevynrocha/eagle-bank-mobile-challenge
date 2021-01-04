@@ -1,14 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
+/* eslint-disable react/style-prop-object */
 import React from 'react';
-import { View } from 'react-native';
-import Login from './src/pages/Login';
+import { Provider } from 'react-redux';
+import { StatusBar } from 'expo-status-bar';
+import FlashMessage from 'react-native-flash-message';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+import Navigation from './src/navigation';
+import store from './src/store/createStore';
 
 const App: React.FC = () => {
   return (
-    <View style={{ flex: 1 }}>
+    <Provider store={store}>
       <StatusBar backgroundColor="#003573" style="light" />
-      <Login />
-    </View>
+      <SafeAreaView style={{ flex: 1 }}>
+        <Navigation />
+      </SafeAreaView>
+      <FlashMessage position="bottom" />
+    </Provider>
   );
 };
 
