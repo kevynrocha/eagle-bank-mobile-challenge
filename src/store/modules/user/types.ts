@@ -3,6 +3,7 @@ export const REMOVE_USER = 'REMOVE_USER';
 
 export interface User {
   id: number;
+  name: string;
   email: string;
   token: string;
 }

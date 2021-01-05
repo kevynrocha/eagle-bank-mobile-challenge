@@ -2,6 +2,7 @@ import { ADD_USER, REMOVE_USER, UserAction, User } from './types';
 
 const INITIAL_STATE: User = {
   id: 0,
+  name: '',
   email: '',
   token: ''
 };
