@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React, { useState, useEffect, useRef } from 'react';
 import { Animated, LogBox, ActivityIndicator } from 'react-native';
 import { useDispatch } from 'react-redux';
@@ -9,12 +10,13 @@ import { useNavigation } from '@react-navigation/native';
 import { showMessage } from 'react-native-flash-message';
 
 import { login } from '../../services/login';
+import { loginSchema } from '../../validations/login';
+import { addUser } from '../../store/modules/user/actions';
 
 import Input from '../../components/shared/Input';
 import Button from '../../components/shared/Button';
 
 import * as S from './styles';
-import { addUser } from '../../store/modules/user/actions';
 
 interface FormData {
   email: string;
@@ -63,28 +65,25 @@ const Login: React.FC = () => {
     try {
       formRef.current?.setErrors({});
 
-      const schema = Yup.object().shape({
-        email: Yup.string().email().required(),
-        password: Yup.string().min(6).required()
-      });
-
-      await schema.validate(data, {
+      await loginSchema.validate(data, {
         abortEarly: false
       });
 
       setLoading(true);
 
-      const { message, status, token, user: validUser } = await login({
+      const user = {
         email: data.email,
         password: data.password
-      });
+      };
+
+      const { message, status, user: validUser } = await login(user);
 
       if (status >= 400) {
         showMessage({
           message,
           type: 'danger',
           titleStyle: {
-            color: '#fafaff'
+            color: '#fafafa'
           }
         });
 
@@ -92,14 +91,9 @@ const Login: React.FC = () => {
         return;
       }
 
-      await AsyncStorage.setItem('@eagle_bank:token', token);
+      await AsyncStorage.setItem('@eagle_bank:token', validUser.token);
 
-      dispatch(
-        addUser({
-          ...validUser,
-          token
-        })
-      );
+      dispatch(addUser(validUser));
 
       formRef.current?.reset();
       navigation.navigate('Home');
@@ -117,10 +111,15 @@ const Login: React.FC = () => {
     }
   };
 
+  const handleNavigateToRegister = () => {
+    navigation.navigate('Register');
+  };
+
   return (
     <S.KeyboardAvoidingView>
       <S.Image />
-      <Animated.View
+      <S.AnimatedView
+        as={Animated.View}
         style={{
           opacity: buttonOpacity
         }}
@@ -144,7 +143,8 @@ const Login: React.FC = () => {
             onSubmitEditing={() => formRef.current?.submitForm()}
           />
 
-          <Animated.View
+          <S.AnimatedView
+            as={Animated.View}
             style={{
               opacity: buttonOpacity,
               transform: [{ translateY: buttonTranslateY }]
@@ -154,13 +154,19 @@ const Login: React.FC = () => {
               onPress={() => formRef.current?.submitForm()}
               disabled={loading}
             >
-              <S.Text>
-                {loading ? <ActivityIndicator color="#fafaff" /> : 'Enter'}
-              </S.Text>
+              <S.TextButton>
+                {loading ? <ActivityIndicator color="#fafaff" /> : 'Login'}
+              </S.TextButton>
             </Button>
-          </Animated.View>
+            <S.ButtonSignUp onPress={handleNavigateToRegister}>
+              <S.Text>
+                Don't have an account?
+                <S.TextSignUp> Sign up here</S.TextSignUp>
+              </S.Text>
+            </S.ButtonSignUp>
+          </S.AnimatedView>
         </Form>
-      </Animated.View>
+      </S.AnimatedView>
     </S.KeyboardAvoidingView>
   );
 };

@@ -11,9 +11,11 @@ export const KeyboardAvoidingView = styled.KeyboardAvoidingView.attrs(
 )`
   flex: 1;
   padding: 0 30px;
-  background-color: #fafaff;
+  background-color: #fafafa;
   justify-content: center;
 `;
+
+export const AnimatedView = styled.View``;
 
 export const Image = styled.Image.attrs(
   (): ImageProps => ({
@@ -25,8 +27,20 @@ export const Image = styled.Image.attrs(
   width: 100%;
 `;
 
-export const Text = styled.Text`
-  color: #fafaff;
+export const TextButton = styled.Text`
+  color: #fafafa;
   font-size: 18px;
   text-align: center;
+`;
+
+export const Text = styled(TextButton)`
+  color: rgba(0, 0, 0, 0.5);
+`;
+
+export const TextSignUp = styled(Text)`
+  font-weight: bold;
+  color: #003573;
+`;
+export const ButtonSignUp = styled.TouchableOpacity`
+  margin-top: 20px;
 `;
