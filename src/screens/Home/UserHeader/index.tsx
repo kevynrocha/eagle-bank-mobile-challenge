@@ -3,18 +3,18 @@ import React from 'react';
 import * as S from './styles';
 
 interface UserHeaderProps {
-  email: string;
+  name: string;
   openModal: () => void;
 }
 
-const UserHeader: React.FC<UserHeaderProps> = ({ email, openModal }) => {
+const UserHeader: React.FC<UserHeaderProps> = ({ name, openModal }) => {
   return (
     <S.FlexRow>
       <S.Title>
-        Hello, <S.StrongTitle>{email}</S.StrongTitle>
+        Hello, <S.StrongTitle>{name}</S.StrongTitle>
       </S.Title>
       <S.Button onPress={() => openModal()}>
-        <S.ButtonTitle>LogOut</S.ButtonTitle>
+        <S.ButtonTitle>Logout</S.ButtonTitle>
       </S.Button>
     </S.FlexRow>
   );

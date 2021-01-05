@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Modal } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
@@ -21,7 +22,7 @@ const Home: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
-  const { email, token } = useSelector(state => state.user);
+  const { name, token } = useSelector(state => state.user);
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -31,14 +32,17 @@ const Home: React.FC = () => {
 
   const fetchUsers = async () => {
     const response = await getUsers({ token, navigation });
-    if (response) {
-      setUsers(response.users);
+    if (!response) {
+      handleLogOut();
+      return;
     }
+    setUsers(response.users);
     setLoading(false);
   };
 
   const handleLogOut = () => {
     dispatch(removeUser());
+    AsyncStorage.removeItem('@eagle_bank:token');
     setIsVisible(false);
     navigation.navigate('Login');
   };
@@ -56,7 +60,7 @@ const Home: React.FC = () => {
       <Modal visible={isVisible} transparent>
         <ModalContent closeModal={handleCloseModal} logOut={handleLogOut} />
       </Modal>
-      <UserHeader email={email} openModal={handleOpenModal} />
+      <UserHeader name={name} openModal={handleOpenModal} />
       <S.Title>
         You token expires in: <S.StrongTitle>30s</S.StrongTitle>
       </S.Title>

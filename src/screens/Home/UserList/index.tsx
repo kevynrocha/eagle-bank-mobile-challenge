@@ -5,8 +5,12 @@ import UserItem from '../UserItem';
 
 import * as S from './styles';
 
+interface User {
+  id: number;
+  email: string;
+}
 interface UserListProps {
-  users: Array<{ id: number; email: string }>;
+  users: User[];
   loading: boolean;
 }
 
