@@ -1,24 +1,29 @@
 import api from './api';
 
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  token: string;
+}
 interface LoginProps {
   email: string;
   password: string;
 }
 
-interface LoginResponse {
+interface LoginSuccess {
+  user: User;
+}
+
+interface LoginFailed {
   message: string;
   status: number;
-  token: string;
-  user: {
-    id: number;
-    email: string;
-  };
 }
 
 export const login = async ({
   email,
   password
-}: LoginProps): Promise<LoginResponse> => {
+}: LoginProps): Promise<LoginSuccess & LoginFailed> => {
   const { data } = await api.post('sessions', {
     email,
     password

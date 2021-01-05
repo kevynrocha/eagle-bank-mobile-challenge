@@ -1,8 +1,13 @@
 import { showMessage } from 'react-native-flash-message';
 import api from './api';
 
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
 interface LoginResponse {
-  users: { id: number; email: string }[];
+  users: User[];
 }
 
 interface LoginProps {
